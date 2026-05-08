@@ -1,28 +1,46 @@
-import React from "react";
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { PresentationFormProps } from "@/types/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  presentationFormSchema,
+  type PresentationFormSchema,
+} from "@/lib/validations";
+import type { PresentationFormProps } from "@/types/types";
 import Spinner from "@/components/Spinner";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import supportedLanguages from "@/config/languages";
 
+export default function PresentationForm({ onSubmit, isSubmitting }: PresentationFormProps) {
+  const form = useForm<PresentationFormSchema>({
+    resolver: zodResolver(presentationFormSchema),
+    defaultValues: {
+      topic: "",
+      numSlides: 5,
+      language: "English",
+      theme: "professional",
+      layoutPreference: "Varied",
+    },
+  });
 
-function PresentationForm({
-  topic,
-  numSlides,
-  language,
-  theme,
-  setTopic,
-  setNumSlides,
-  setLanguage,
-  setTheme,
-  loading,
-  handleGeneratePPT,
-} : PresentationFormProps) {
   return (
-    <>
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       <h2 className="text-center text-lg font-semibold text-blue-400">
         AI-Powered Presentations
       </h2>
@@ -30,85 +48,109 @@ function PresentationForm({
         Generate Custom PowerPoint Slides
       </h1>
       <p className="mt-2 text-center text-gray-700 dark:text-slate-300">
-        Enter a topic, specify the number of slides, and choose a layout preference.
+        Enter a topic, specify the number of slides, and choose your preferences.
       </p>
-      <form
-        className="mt-6 space-y-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleGeneratePPT();
-        }}
-      >
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <div className="flex-1 gap-3 space-y-3">
-            <Label htmlFor="topic">Presentation Topic</Label>
-            <Input
-              id="topic"
-              type="text"
-              placeholder="Enter your topic"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              required
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <FormField
+              control={form.control}
+              name="topic"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Presentation Topic</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your topic" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="numSlides"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Number of Slides</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={1}
+                      max={20}
+                      placeholder="5"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-          <div className="flex-1 gap-3 space-y-3">
-            <Label htmlFor="numSlides">Number of Slides</Label>
-            <Input
-              id="numSlides"
-              type="number"
-              min="1"
-              max="20"
-              placeholder="Enter slides count"
-              value={numSlides}
-              onChange={(e) => setNumSlides(Number(e.target.value))}
-              required
+
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem className="flex-1 mt-4">
+                  <FormLabel>Presentation Language</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a language" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {supportedLanguages.map((lang) => (
+                        <SelectItem key={lang.code} value={lang.name}>
+                          {lang.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="theme"
+              render={({ field }) => (
+                <FormItem className="flex-1 mt-4">
+                  <FormLabel>Presentation Theme</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a theme" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="professional">Professional</SelectItem>
+                      <SelectItem value="minimal">Minimal</SelectItem>
+                      <SelectItem value="vibrant">Vibrant</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-        </div>
 
-        <div className="flex flex-col gap-4 sm:flex-row">
-          {/* Language Selection */}
-          <div className="flex-1 mt-4 gap-3 space-y-3">
-            <Label>Presentation Language</Label>
-            <Select onValueChange={setLanguage} value={language}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a language" />
-              </SelectTrigger>
-              <SelectContent>
-                {supportedLanguages.map((lang) => (
-                  <SelectItem key={lang.code} value={lang.name}>
-                    {lang.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="text-center mt-3">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto cursor-pointer"
+            >
+              {isSubmitting ? <Spinner /> : "Generate Presentation"}
+            </Button>
           </div>
-
-          {/* Theme Selection */}
-          <div className="flex-1 mt-4 gap-3 space-y-3">
-            <Label>Presentation Theme</Label>
-            <Select onValueChange={setTheme} value={theme}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a theme" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="professional">Professional</SelectItem>
-                <SelectItem value="minimal">Minimal</SelectItem>
-                <SelectItem value="vibrant">Vibrant</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <div className="text-center mt-3">
-          <Button type="submit" className="w-full sm:w-auto cursor-pointer">
-            {loading ? <Spinner/> : "Generate Presentation"}
-          </Button>
-        </div>
-      </form>
-      </div>
-    </>
+        </form>
+      </Form>
+    </div>
   );
 }
-
-export default PresentationForm;

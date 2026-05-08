@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git mv *)",
+      "Bash(npm uninstall *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

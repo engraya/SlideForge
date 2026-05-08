@@ -4,40 +4,37 @@ export type Language = string;
 
 export type Theme = "professional" | "minimal" | "vibrant";
 
-export interface GeneratePPTResponse {
-    job_id: string;
-    status: "pending" | "processing" | "ready" | "failed";
-    message: string;
-    filename: string;
-    download_url: string | null;
+export type JobStatus = "pending" | "processing" | "ready" | "failed";
+
+export interface PresentationJobResponse {
+  job_id: string;
+  status: JobStatus;
+  message: string;
+  filename: string;
+  download_url: string | null;
 }
 
-export interface PollStatusResponse {
-    job_id: string;
-    status: "pending" | "processing" | "ready" | "failed";
-    message: string;
-    filename: string;
-    download_url: string | null;
-}
-
-export interface GeneratedComponentProps {
-    isDownloading: boolean;
-    handleDownloadPPT: () => void;
-    handleGenerateAgain: () => void;
-    pptFile: string;
+export interface PresentationFormValues {
+  topic: string;
+  numSlides: number;
+  language: string;
+  theme: Theme;
+  layoutPreference: LayoutPreference;
 }
 
 export interface PresentationFormProps {
-    topic: string;
-    numSlides: number;
-    setTopic: (value: string) => void;
-    setNumSlides: (value: number) => void;
-    loading: boolean;
-    handleGeneratePPT: () => void;
-    layoutPreference: LayoutPreference;
-    setLayoutPreference: (value: LayoutPreference) => void;
-    language: Language;
-    setLanguage: (language: Language) => void;
-    theme: Theme;
-    setTheme: (theme: Theme) => void;
+  onSubmit: (values: PresentationFormValues) => Promise<void>;
+  isSubmitting: boolean;
+}
+
+export interface GeneratedComponentProps {
+  isDownloading: boolean;
+  handleDownloadPPT: () => Promise<void>;
+  handleGenerateAgain: () => void;
+}
+
+export interface ApiError {
+  message: string;
+  status?: number;
+  code?: string;
 }
