@@ -7,10 +7,7 @@ const supportedLanguages = [
     { code: "zh", name: "Chinese" },
     { code: "hi", name: "Hindi" },
     { code: "pt", name: "Portuguese" },
-    { code: "ru", name: "Russian" },
     { code: "ja", name: "Japanese" },
-    { code: "ha", name: "Hausa" },
-    { code: "tr", name: "Turkish" },
   ];
   
   export default supportedLanguages;

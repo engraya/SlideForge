@@ -12,9 +12,11 @@ function PresentationForm({
   topic,
   numSlides,
   language,
+  theme,
   setTopic,
   setNumSlides,
   setLanguage,
+  setTheme,
   loading,
   handleGeneratePPT,
 } : PresentationFormProps) {
@@ -55,6 +57,7 @@ function PresentationForm({
               id="numSlides"
               type="number"
               min="1"
+              max="20"
               placeholder="Enter slides count"
               value={numSlides}
               onChange={(e) => setNumSlides(Number(e.target.value))}
@@ -63,9 +66,9 @@ function PresentationForm({
           </div>
         </div>
 
-
-          {/* Dropdown for Language Selection */}
-          <div className="mt-4 gap-3 space-y-3">
+        <div className="flex flex-col gap-4 sm:flex-row">
+          {/* Language Selection */}
+          <div className="flex-1 mt-4 gap-3 space-y-3">
             <Label>Presentation Language</Label>
             <Select onValueChange={setLanguage} value={language}>
               <SelectTrigger className="w-full">
@@ -73,13 +76,29 @@ function PresentationForm({
               </SelectTrigger>
               <SelectContent>
                 {supportedLanguages.map((lang) => (
-                  <SelectItem key={lang.code} value={lang.code}>
+                  <SelectItem key={lang.code} value={lang.name}>
                     {lang.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
+
+          {/* Theme Selection */}
+          <div className="flex-1 mt-4 gap-3 space-y-3">
+            <Label>Presentation Theme</Label>
+            <Select onValueChange={setTheme} value={theme}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="professional">Professional</SelectItem>
+                <SelectItem value="minimal">Minimal</SelectItem>
+                <SelectItem value="vibrant">Vibrant</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
         <div className="text-center mt-3">
           <Button type="submit" className="w-full sm:w-auto cursor-pointer">

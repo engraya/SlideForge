@@ -5,9 +5,8 @@ import PagesWrapper from "@/components/PagesWrapper";
 import PresentationForm from "../_components/PresentationForm";
 import { toast } from "react-toastify";
 import Generated from "../_components/Generated";
-import { GeneratePPTResponse } from "@/types/types";
+import { GeneratePPTResponse, PollStatusResponse, LayoutPreference, Theme } from "@/types/types";
 import { apiFetcher } from "@/config/axios";
-import { LayoutPreference } from "@/types/types";
 
 
 
@@ -15,89 +14,93 @@ function GeneratePage() {
   const [topic, setTopic] = useState<string>("");
   const [numSlides, setNumSlides] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
-  const [pptFile, setPptFile] = useState<string>("");
+  const [jobId, setJobId] = useState<string>("");
+  const [filename, setFilename] = useState<string>("");
   const [isFileReady, setIsFileReady] = useState<boolean>(false);
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [layoutPreference, setLayoutPreference] = useState<LayoutPreference>("Varied");
-  const [language, setLanguage] = useState<string>("en"); // Default to English
-
+  const [language, setLanguage] = useState<string>("English");
+  const [theme, setTheme] = useState<Theme>("professional");
 
   useEffect(() => {
-    console.log("pptFile updated:", pptFile);
-    if (pptFile) {
-      checkIfFileIsReady(pptFile);
+    if (jobId) {
+      pollStatus(jobId);
     }
-  }, [pptFile]);
-    // Handler for "Generate Again"
-    const handleGenerateAgain = () => {
-      setPptFile(""); // Reset file
-      setIsFileReady(false); // Hide Generated component
-      setTopic(""); // Clear topic input
-      setNumSlides(5); // Reset slides count
-    };
+  }, [jobId]);
+
+  const handleGenerateAgain = () => {
+    setJobId("");
+    setFilename("");
+    setIsFileReady(false);
+    setTopic("");
+    setNumSlides(5);
+  };
 
   const handleGeneratePPT = async () => {
     setLoading(true);
     try {
-      const response = await apiFetcher.post<GeneratePPTResponse>("/generate_ppt", {
+      const response = await apiFetcher.post<GeneratePPTResponse>("/api/v1/presentations", {
         topic,
         num_slides: numSlides,
         language,
+        theme,
       });
-      if (response.data?.filename) {
-        setPptFile(response.data.filename);
-        setIsFileReady(true); // Reset file ready state
+      if (response.data?.job_id) {
+        setJobId(response.data.job_id);
       } else {
-        console.error("No filename in API response", response);
+        console.error("No job_id in API response", response);
       }
-      toast.success(response.data.message || "Presentation is being generated 🎉");
+      toast.success(response.data.message || "Presentation generation queued!");
     } catch (error) {
-      toast.error("Failed to Generate Presentation. Please try again! 😞");
+      toast.error("Failed to Generate Presentation. Please try again!");
       console.error("Error generating PPT:", error);
     }
     setLoading(false);
   };
 
-  // Check if file is available for download
-  const checkIfFileIsReady = async (filename: string) => {
+  const pollStatus = (id: string) => {
     const interval = setInterval(async () => {
       try {
-        const response = await apiFetcher.head(`/download_ppt/${filename}`);
-        if (response.status === 200) {
+        const response = await apiFetcher.get<PollStatusResponse>(`/api/v1/presentations/${id}/status`);
+        const { status, filename: readyFilename } = response.data;
+        if (status === "ready") {
+          setFilename(readyFilename);
           setIsFileReady(true);
-          toast.success("Presentation is ready for download! 🎉");
+          toast.success("Presentation is ready for download!");
+          clearInterval(interval);
+        } else if (status === "failed") {
+          toast.error(response.data.message || "Presentation generation failed.");
           clearInterval(interval);
         }
       } catch (error) {
-        console.log("File not ready yet, checking again...", error);
+        console.log("Error polling status:", error);
       }
-    }, 3000);
+    }, 2000);
   };
 
   const handleDownloadPPT = async () => {
-    if (!pptFile || !isFileReady) {
+    if (!jobId || !isFileReady) {
       toast.error("File is not ready yet!");
       return;
     }
-    setIsDownloading(true)
+    setIsDownloading(true);
     try {
-      const response = await apiFetcher.get(`/download_ppt/${pptFile}`, {
+      const response = await apiFetcher.get(`/api/v1/presentations/${jobId}/download`, {
         responseType: "blob",
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", pptFile);
+      link.setAttribute("download", filename || `presentation-${jobId}.pptx`);
       document.body.appendChild(link);
       link.click();
       link.remove();
-      toast.success("Presentation Downloaded Successfully! 🎉");
+      toast.success("Presentation Downloaded Successfully!");
     } catch (error) {
-      toast.error("Failed to Download the Presentation 😞");
+      toast.error("Failed to Download the Presentation");
       console.error("Error downloading PPT:", error);
-      setIsDownloading(false)
     } finally {
-      setIsDownloading(false)
+      setIsDownloading(false);
     }
   };
 
@@ -110,27 +113,29 @@ function GeneratePage() {
           </span>
         </h1>
         <div className="parent-container mx-auto mt-10 max-w-2xl rounded-lg border-2 border-blue-400 p-6">
-        {!pptFile || !isFileReady ? (
-          <PresentationForm
-            topic={topic}
-            numSlides={numSlides}
-            setTopic={setTopic}
-            setNumSlides={setNumSlides}
-            loading={loading}
-            handleGeneratePPT={handleGeneratePPT}
-            layoutPreference={layoutPreference}
-            setLayoutPreference={setLayoutPreference}
-            language={language}
-            setLanguage={setLanguage}
-          />
-        ) : (
-          <Generated
-            isDownloading={isDownloading}
-            handleDownloadPPT={handleDownloadPPT}
-            handleGenerateAgain={handleGenerateAgain}
-            pptFile={pptFile} 
-          />
-        )}
+          {!jobId || !isFileReady ? (
+            <PresentationForm
+              topic={topic}
+              numSlides={numSlides}
+              setTopic={setTopic}
+              setNumSlides={setNumSlides}
+              loading={loading}
+              handleGeneratePPT={handleGeneratePPT}
+              layoutPreference={layoutPreference}
+              setLayoutPreference={setLayoutPreference}
+              language={language}
+              setLanguage={setLanguage}
+              theme={theme}
+              setTheme={setTheme}
+            />
+          ) : (
+            <Generated
+              isDownloading={isDownloading}
+              handleDownloadPPT={handleDownloadPPT}
+              handleGenerateAgain={handleGenerateAgain}
+              pptFile={filename}
+            />
+          )}
         </div>
       </div>
     </PagesWrapper>
