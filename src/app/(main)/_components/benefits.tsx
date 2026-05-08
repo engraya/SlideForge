@@ -1,175 +1,100 @@
-import React from 'react'
+import { Sparkles, Globe, PenLine, Clock, Share2, MessageSquare, CloudUpload, Lightbulb } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { LucideIcon } from 'lucide-react'
 
-function Benefits() {
-  return (
-    <section
-      id="benefits"
-      className={cn(
-        'container space-y-6 rounded-md py-8',
-        'md:py-12',
-        'lg:py-24',
-      )}
-    >
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        <h2
-          className={cn(
-            'bg-gradient-to-br from-gray-900 via-gray-600 to-gray-400 bg-clip-text text-center text-4xl font-bold tracking-tight text-transparent drop-shadow-sm',
-            'dark:from-gray-100 dark:to-gray-800',
-            'md:text-6xl md:leading-tight',
-          )}
-        >
-          Why Choose Presenta-AI?
-        </h2>
-        <div className="mt-16 grid gap-16 sm:mt-24 sm:grid-cols-4 sm:gap-8">
-          {benefits.map((benefit, index) => (
-            <div key={index} className="text-center">
-              <div className="relative left-2 mx-auto size-20 sm:size-28 lg:size-32">
-                <div className="relative z-10 flex size-full items-center justify-center rounded-full border border-gray-300 bg-white shadow">
-                  {benefit.icon}
-                </div>
-                <div className="absolute inset-0 -translate-x-2 -translate-y-2 rounded-full bg-gradient-to-br from-gray-800 via-gray-100 to-gray-900" />
-              </div>
-              <h3 className="font-headline mt-6 text-xl sm:mt-10 sm:text-2xl">
-                {benefit.title}
-              </h3>
-              <p className="mt-4 leading-relaxed">{benefit.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+interface Benefit {
+  icon: LucideIcon
+  title: string
+  description: string
 }
 
-const benefits = [
+const benefits: Benefit[] = [
   {
+    icon: Sparkles,
     title: "AI-Powered Slide Generation",
     description:
-      "Effortlessly convert any topic into a structured and visually engaging PowerPoint presentation with AI-driven automation.",
-    icon: <IconSlide />,
+      "Effortlessly convert any topic into a structured, visually engaging presentation with AI-driven automation.",
   },
   {
-    title: "Multi-Language Presentation Support",
+    icon: Globe,
+    title: "Multi-Language Support",
     description:
-      "Create presentations in multiple languages, making it perfect for international business, education, and research.",
-    icon: <IconShare />,
+      "Create presentations in 9 languages — perfect for international business, education, and research.",
   },
   {
-    title: "Fully Editable & Customizable",
+    icon: PenLine,
+    title: "Fully Editable Output",
     description:
-      "Download AI-generated slides in .pptx format and modify text, design, and layout to suit your unique style and branding.",
-    icon: <IconTemplate />,
+      "Download AI-generated slides in .pptx format and customize text, design, and layout to match your brand.",
   },
   {
+    icon: Clock,
     title: "Save Hours of Work",
     description:
-      "Eliminate the hassle of manual slide creation. Let AI generate structured content while you focus on delivering an impactful presentation.",
-    icon: <IconClock />,
+      "Eliminate manual slide creation. Let AI generate structured content while you focus on delivery.",
   },
   {
+    icon: Share2,
     title: "Easy Export & Sharing",
     description:
-      "Download your presentation in PowerPoint format (.pptx) and seamlessly share it with your team, clients, or audience.",
-    icon: <IconShare />,
+      "Download in PowerPoint format and share with your team, clients, or audience instantly.",
   },
   {
-    title: "AI-Generated Speaker Notes",
+    icon: MessageSquare,
+    title: "AI Speaker Notes",
     description:
-      "Get AI-generated speaker notes alongside your slides to help you deliver confident and well-structured presentations.",
-    icon: <IconSlide />,
+      "Get AI-generated speaker notes alongside your slides to deliver confident, well-structured presentations.",
   },
   {
-    title: "Cloud Storage & Access Anywhere",
+    icon: CloudUpload,
+    title: "Access Anywhere",
     description:
-      "Store your presentations in the cloud, making them accessible from any device—perfect for remote work and on-the-go editing.",
-    icon: <IconClock />,
+      "Download and store your presentations in the cloud — accessible from any device at any time.",
   },
   {
-    title: "Smart AI Suggestions & Enhancements",
+    icon: Lightbulb,
+    title: "Smart AI Enhancements",
     description:
-      "Get AI-powered suggestions for improving slide content, visuals, and layout to create impactful and engaging presentations.",
-    icon: <IconTemplate />,
+      "Get AI suggestions for improving slide content, visuals, and layout to maximize impact.",
   },
-];
+]
 
-
-
-
-
-function IconSlide() {
+const Benefits = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="0.5"
-      stroke="currentColor"
-      className="size-1/2 text-gray-500"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-      ></path>
-    </svg>
-  )
-}
+    <section id="benefits" className="container max-w-7xl mx-auto px-4 md:px-8 lg:px-12 py-20 lg:py-28">
 
-function IconTemplate() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="0.5"
-      stroke="currentColor"
-      className="size-1/2 text-gray-500"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
-      />
-    </svg>
-  )
-}
+      {/* Section header */}
+      <div className="mx-auto max-w-2xl text-center mb-16">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-200 bg-violet-50 text-violet-700 text-xs font-medium mb-4 dark:border-violet-800 dark:bg-violet-950 dark:text-violet-300">
+          Why it matters
+        </div>
+        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-4">
+          Why choose{' '}
+          <span className="bg-gradient-to-r from-violet-600 to-indigo-500 bg-clip-text text-transparent">
+            IntelliSlide-AI?
+          </span>
+        </h2>
+        <p className="text-muted-foreground text-lg leading-relaxed">
+          Designed to save you time and make every presentation look professionally crafted.
+        </p>
+      </div>
 
-function IconClock() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth=".5"
-      stroke="currentColor"
-      className="size-1/2 text-gray-500"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-      ></path>
-    </svg>
-  )
-}
-
-function IconShare() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="0.5"
-      stroke="currentColor"
-      className="size-1/2 text-gray-500"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
-      />
-    </svg>
+      {/* Benefits grid */}
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {benefits.map(({ icon: Icon, title, description }) => (
+          <div key={title} className={cn('flex flex-col items-center text-center gap-4')}>
+            {/* Icon circle */}
+            <div className="flex items-center justify-center size-16 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/20">
+              <Icon className="size-7 text-white" strokeWidth={1.75} />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="font-semibold text-foreground">{title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   )
 }
 

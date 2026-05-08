@@ -14,9 +14,9 @@ const fontSans = PlusJakartaSans({
 });
 
 export const metadata: Metadata = {
-  title: "IntelliSlide-AI – AI-Powered PowerPoint Generator",
+  title: "SlideForge – AI-Powered PowerPoint Generator",
   description:
-    "Create stunning PowerPoint presentations effortlessly with intelliSlide-AI. Just enter your topic, set parameters, and let AI generate a professional deck in minutes",
+    "Create stunning PowerPoint presentations effortlessly with SlideForge. Just enter your topic, set parameters, and let AI generate a professional deck in minutes",
 };
 
 export default function RootLayout({

@@ -1,118 +1,110 @@
-import Balancer from 'react-wrap-balancer'
-import { Card } from '@/components/ui/card'
+import { Sparkles, Globe, FileDown, LayoutTemplate, ImageIcon, Zap, Download, Palette, Cloud } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { LucideIcon } from 'lucide-react'
 
-const features = [
+interface Feature {
+  icon: LucideIcon
+  title: string
+  description: string
+}
+
+const features: Feature[] = [
   {
-    title: "AI-Powered Presentation Generation",
+    icon: Sparkles,
+    title: "AI-Powered Generation",
     description:
-      "Turn any topic into a fully structured PowerPoint presentation instantly. AI handles content, layout, and formatting for you.",
+      "Turn any topic into a fully structured PowerPoint presentation instantly. AI handles content, layout, and formatting.",
   },
   {
+    icon: Globe,
     title: "Multi-Language Support",
     description:
-      "Generate presentations in multiple languages, including English, Spanish, French, German, Arabic, and more—ideal for global audiences.",
+      "Generate presentations in 9 languages — English, Spanish, French, German, Arabic, and more.",
   },
   {
-    title: "Customizable & Editable Slides",
+    icon: FileDown,
+    title: "Editable .pptx Output",
     description:
-      "Download AI-generated slides in .pptx format and modify text, design, and layout in PowerPoint, Google Slides, or Keynote.",
+      "Download slides in .pptx format and modify text, design, and layout in PowerPoint, Google Slides, or Keynote.",
   },
   {
+    icon: LayoutTemplate,
     title: "Smart Slide Structuring",
     description:
-      "AI organizes slides with clear titles, bullet points, and well-structured content to ensure a logical flow and engaging presentation.",
+      "AI organizes slides with clear titles, bullet points, and logical flow to keep your audience engaged.",
   },
   {
-    title: "Visual-Ready with Image & Chart Placeholders",
+    icon: ImageIcon,
+    title: "Image & Chart Placeholders",
     description:
-      "Each slide includes placeholders for images, charts, and other visuals, making it easy to enhance your presentation with graphics.",
+      "Each slide includes placeholders for visuals, making it easy to enhance your presentation with graphics.",
   },
   {
-    title: "Fast & Effortless Slide Creation",
+    icon: Zap,
+    title: "Fast Slide Creation",
     description:
-      "Generate an entire presentation in seconds, saving you hours of manual work. AI takes care of research and slide arrangement.",
+      "Generate an entire presentation in seconds. AI takes care of research and slide arrangement so you don't have to.",
   },
   {
-    title: "Seamless Download & Export",
+    icon: Download,
+    title: "Seamless Export",
     description:
-      "Export your AI-generated presentation as a PowerPoint (.pptx) file, ready for further customization or immediate presentation.",
+      "Export as a PowerPoint file instantly, ready for customization or immediate presentation.",
   },
   {
-    title: "Theme & Design Optimization",
+    icon: Palette,
+    title: "Theme & Design Options",
     description:
-      "Choose from AI-suggested professional themes and color schemes to make your presentation visually appealing.",
+      "Choose from Professional, Minimal, or Vibrant themes to match your audience and context.",
   },
   {
-    title: "Real-Time Collaboration & Cloud Storage",
+    icon: Cloud,
+    title: "Cloud-Ready & Shareable",
     description:
-      "Collaborate with your team in real time, store presentations in the cloud, and access them anytime from any device.",
-  }
-];
-
-
-
-
+      "Access your presentations from any device and share with teammates, clients, or your audience.",
+  },
+]
 
 const Features = () => {
   return (
-    <section
-      id="features"
-      className={cn(
-        'container space-y-6 rounded-md py-8',
-        'md:py-12 px-12',
-        'lg:py-16 px-16',
-      )}
-    >
-      <div
-        className={cn(
-          'mx-auto flex max-w-4xl flex-col items-center space-y-4 text-center',
-        )}
-      >
-        <h2
-          className={cn(
-            'bg-gradient-to-br from-gray-900 via-gray-600 to-gray-400 bg-clip-text text-center text-4xl font-bold tracking-tight text-transparent drop-shadow-sm',
-            'dark:from-gray-100 dark:to-gray-800',
-            'md:text-6xl md:leading-tight',
-          )}
-        >
-          Features
-        </h2>
-        <p
-          className={cn(
-            'max-w-[85%] leading-normal text-muted-foreground',
-            'sm:text-lg',
-            'sm:leading-7',
-          )}
-        >
-      <Balancer>
-        Transform your ideas into stunning presentations with AI-powered slide generation. Simply input your topic, and IntelliSlide-AI crafts a professional, customizable PowerPoint for you in seconds.
-      </Balancer>
+    <section id="features" className="container max-w-7xl mx-auto px-4 md:px-8 lg:px-12 py-20 lg:py-28">
 
+      {/* Section header */}
+      <div className="mx-auto max-w-2xl text-center mb-14">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-200 bg-violet-50 text-violet-700 text-xs font-medium mb-4 dark:border-violet-800 dark:bg-violet-950 dark:text-violet-300">
+          What you get
+        </div>
+        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-4">
+          Everything you need to{' '}
+          <span className="bg-gradient-to-r from-violet-600 to-indigo-500 bg-clip-text text-transparent">
+            present with confidence
+          </span>
+        </h2>
+        <p className="text-muted-foreground text-lg leading-relaxed">
+          From topic to polished slides in seconds. IntelliSlide-AI handles the heavy lifting so you can focus on delivering.
         </p>
       </div>
-      <div
-        className={cn(
-          'grid justify-center gap-4',
-          'sm:grid-cols-2',
-          'md:grid-cols-3',
-        )}
-      >
-        {features.map((feature) => (
-          <Card
-            key={feature.title}
+
+      {/* Feature cards grid */}
+      <div className={cn('grid gap-5', 'sm:grid-cols-2', 'lg:grid-cols-3')}>
+        {features.map(({ icon: Icon, title, description }) => (
+          <div
+            key={title}
             className={cn(
-              'flex flex-col justify-between rounded-md p-6',
+              'group flex flex-col gap-4 rounded-xl border border-border bg-card p-6',
+              'shadow-sm hover:shadow-md',
+              'hover:border-violet-200 dark:hover:border-violet-800',
+              'transition-all duration-200',
             )}
           >
-            {/* <feature.icon className={cn('h-12 w-12')} /> */}
-            <div className={cn('space-y-2')}>
-              <h3 className="font-bold">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">
-                {feature.description}
-              </p>
+            <div className="flex items-center justify-center size-10 rounded-lg bg-violet-50 dark:bg-violet-950 shrink-0">
+              <Icon className="size-5 text-violet-600 dark:text-violet-400" />
             </div>
-          </Card>
+            <div className="space-y-1.5">
+              <h3 className="font-semibold text-foreground">{title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+            </div>
+          </div>
         ))}
       </div>
     </section>

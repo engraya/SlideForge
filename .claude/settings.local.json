@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git mv *)",
       "Bash(npm uninstall *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Ahmad\\\\Frontend\\\\SlideForge\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Ahmad\\\\Frontend\\\\SlideForge\" -Directory)",
+      "Bash(Select-Object Name)"
     ]
   }
 }

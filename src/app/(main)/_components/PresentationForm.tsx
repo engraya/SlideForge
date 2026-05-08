@@ -41,19 +41,20 @@ export default function PresentationForm({ onSubmit, isSubmitting }: Presentatio
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-center text-lg font-semibold text-blue-400">
-        AI-Powered Presentations
-      </h2>
-      <h1 className="mt-2 text-center text-3xl font-bold">
-        Generate Custom PowerPoint Slides
-      </h1>
-      <p className="mt-2 text-center text-gray-700 dark:text-slate-300">
-        Enter a topic, specify the number of slides, and choose your preferences.
-      </p>
+      <div className="mb-2">
+        <h2 className="text-2xl font-bold tracking-tight">
+          Generate Custom PowerPoint Slides
+        </h2>
+        <p className="mt-1.5 text-sm text-muted-foreground">
+          Enter a topic, set your preferences, and download a polished presentation.
+        </p>
+      </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
-          <div className="flex flex-col gap-4 sm:flex-row">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-5">
+
+          {/* Row 1: Topic + Slides */}
+          <div className="flex flex-col gap-5 sm:flex-row">
             <FormField
               control={form.control}
               name="topic"
@@ -61,8 +62,14 @@ export default function PresentationForm({ onSubmit, isSubmitting }: Presentatio
                 <FormItem className="flex-1">
                   <FormLabel>Presentation Topic</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your topic" {...field} />
+                    <Input
+                      placeholder="e.g. Climate Change & Renewable Energy"
+                      {...field}
+                    />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {field.value?.length ?? 0} / 200 characters (min 3)
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -72,8 +79,8 @@ export default function PresentationForm({ onSubmit, isSubmitting }: Presentatio
               control={form.control}
               name="numSlides"
               render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Number of Slides</FormLabel>
+                <FormItem className="sm:w-36">
+                  <FormLabel>Slides</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -84,19 +91,21 @@ export default function PresentationForm({ onSubmit, isSubmitting }: Presentatio
                       onChange={(e) => field.onChange(e.target.valueAsNumber)}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground mt-1">1 – 20</p>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row">
+          {/* Row 2: Language + Theme */}
+          <div className="flex flex-col gap-5 sm:flex-row">
             <FormField
               control={form.control}
               name="language"
               render={({ field }) => (
-                <FormItem className="flex-1 mt-4">
-                  <FormLabel>Presentation Language</FormLabel>
+                <FormItem className="flex-1">
+                  <FormLabel>Language</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -120,8 +129,8 @@ export default function PresentationForm({ onSubmit, isSubmitting }: Presentatio
               control={form.control}
               name="theme"
               render={({ field }) => (
-                <FormItem className="flex-1 mt-4">
-                  <FormLabel>Presentation Theme</FormLabel>
+                <FormItem className="flex-1">
+                  <FormLabel>Theme</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -140,13 +149,45 @@ export default function PresentationForm({ onSubmit, isSubmitting }: Presentatio
             />
           </div>
 
-          <div className="text-center mt-3">
+          {/* Row 3: Layout Preference */}
+          <FormField
+            control={form.control}
+            name="layoutPreference"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Layout Preference</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a layout" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Varied">Varied — mix of layouts</SelectItem>
+                    <SelectItem value="Text-Heavy">Text-Heavy — more content, less visuals</SelectItem>
+                    <SelectItem value="Image-Focused">Image-Focused — visuals-first</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Submit */}
+          <div className="pt-2">
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full sm:w-auto cursor-pointer"
+              className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white border-0 h-11 text-sm font-semibold transition-all duration-150"
             >
-              {isSubmitting ? <Spinner /> : "Generate Presentation"}
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <Spinner />
+                  Generating your slides…
+                </span>
+              ) : (
+                "Generate Presentation"
+              )}
             </Button>
           </div>
         </form>
